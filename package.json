@@ -4,6 +4,7 @@
   "description": "Write Pino transports easily",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky install",
     "test": "standard | snazzy && tap test/*.test.js"
   },
   "repository": {
@@ -24,6 +25,7 @@
     "split2": "^3.2.2"
   },
   "devDependencies": {
+    "husky": "^6.0.0",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
     "tap": "^15.0.2"

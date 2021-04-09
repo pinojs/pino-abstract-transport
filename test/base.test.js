@@ -8,19 +8,19 @@ const build = require('../')
 test('parse newlined delimited JSON', ({ same, plan }) => {
   plan(2)
   const expected = [{
-    level:30,
-    time:1617955768092,
-    pid:2942,
-    hostname: "MacBook-Pro.local",
-    "msg":"hello world"
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
   }, {
-    level:30,
-    time:1617955768092,
-    pid:2942,
-    hostname: "MacBook-Pro.local",
-    "msg":"another message",
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
     prop: 42
-  }] 
+  }]
 
   const stream = build(function (source) {
     source.on('data', function (line) {
@@ -76,22 +76,22 @@ test('pure values', ({ same, ok, plan }) => {
 test('support async iteration', ({ same, plan }) => {
   plan(2)
   const expected = [{
-    level:30,
-    time:1617955768092,
-    pid:2942,
-    hostname: "MacBook-Pro.local",
-    "msg":"hello world"
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
   }, {
-    level:30,
-    time:1617955768092,
-    pid:2942,
-    hostname: "MacBook-Pro.local",
-    "msg":"another message",
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
     prop: 42
-  }] 
+  }]
 
   const stream = build(async function (source) {
-    for await (let line of source) {
+    for await (const line of source) {
       same(expected.shift(), line)
     }
   })
@@ -112,21 +112,21 @@ test('rejecting errors the stream', async ({ same, plan }) => {
 
 test('set metadata', ({ same, plan, equal }) => {
   plan(9)
-  
+
   const expected = [{
-    level:30,
-    time:1617955768092,
-    pid:2942,
-    hostname: "MacBook-Pro.local",
-    "msg":"hello world"
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
   }, {
-    level:30,
-    time:1617955768092,
-    pid:2942,
-    hostname: "MacBook-Pro.local",
-    "msg":"another message",
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
     prop: 42
-  }] 
+  }]
 
   const stream = build(function (source) {
     source.on('data', function (line) {

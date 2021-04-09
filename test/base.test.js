@@ -109,3 +109,37 @@ test('rejecting errors the stream', async ({ same, plan }) => {
   const [err] = await once(stream, 'error')
   same(err.message, 'kaboom')
 })
+
+test('set metadata', ({ same, plan, equal }) => {
+  plan(9)
+  
+  const expected = [{
+    level:30,
+    time:1617955768092,
+    pid:2942,
+    hostname: "MacBook-Pro.local",
+    "msg":"hello world"
+  }, {
+    level:30,
+    time:1617955768092,
+    pid:2942,
+    hostname: "MacBook-Pro.local",
+    "msg":"another message",
+    prop: 42
+  }] 
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      same(this.lastLevel, obj.level)
+      same(this.lastTime, obj.time)
+      same(this.lastObj, obj)
+      same(obj, line)
+    })
+  }, { metadata: true })
+
+  equal(stream[Symbol.for('pino.metadata')], true)
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})

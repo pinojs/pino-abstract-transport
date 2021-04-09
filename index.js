@@ -1,8 +1,9 @@
 'use strict'
 
+const metadata = Symbol.for('pino.metadata')
 const split = require('split2')
 
-module.exports = function build (fn) {
+module.exports = function build (fn, opts = {}) {
   const stream = split(function (line) {
     let value
 
@@ -25,8 +26,21 @@ module.exports = function build (fn) {
       }
     }
 
+    if (stream[metadata]) {
+      stream.lastTime = value.time
+      stream.lastLevel = value.level
+      stream.lastObj = value
+    }
+
     return value
   })
+
+  if (opts.metadata) {
+    stream[metadata] = true
+    stream.lastTime = 0
+    stream.lastLevel = 0
+    stream.lastObj = null
+  }
 
   let res = fn(stream)
 

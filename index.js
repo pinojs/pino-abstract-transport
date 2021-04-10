@@ -4,6 +4,7 @@ const metadata = Symbol.for('pino.metadata')
 const split = require('split2')
 
 module.exports = function build (fn, opts = {}) {
+  const parseLines = opts.parse === 'lines'
   const stream = split(function (line) {
     let value
 
@@ -22,7 +23,7 @@ module.exports = function build (fn, opts = {}) {
     if (typeof value !== 'object') {
       value = {
         data: value,
-        time: new Date().toISOString()
+        time: Date.now()
       }
     }
 
@@ -32,10 +33,14 @@ module.exports = function build (fn, opts = {}) {
       stream.lastObj = value
     }
 
+    if (parseLines) {
+      return line
+    }
+
     return value
   })
 
-  if (opts.metadata) {
+  if (opts.metadata !== false) {
     stream[metadata] = true
     stream.lastTime = 0
     stream.lastLevel = 0

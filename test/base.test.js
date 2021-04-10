@@ -33,6 +33,34 @@ test('parse newlined delimited JSON', ({ same, plan }) => {
   stream.end()
 })
 
+test('parse newlined delimited JSON', ({ same, plan }) => {
+  plan(2)
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      same(expected.shift(), line)
+    })
+  }, { parse: 'json' })
+
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})
+
 test('null support', ({ same, plan }) => {
   plan(1)
   const stream = build(function (source) {
@@ -65,7 +93,7 @@ test('pure values', ({ same, ok, plan }) => {
     source.on('data', function (line) {
       same(line.data, 42)
       ok(line.time)
-      same(new Date(line.time).toISOString(), line.time)
+      same(new Date(line.time).getTime(), line.time)
     })
   })
 
@@ -139,6 +167,108 @@ test('set metadata', ({ same, plan, equal }) => {
   }, { metadata: true })
 
   equal(stream[Symbol.for('pino.metadata')], true)
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})
+
+test('parse lines', ({ same, plan, equal }) => {
+  plan(9)
+
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      same(this.lastLevel, obj.level)
+      same(this.lastTime, obj.time)
+      same(this.lastObj, obj)
+      same(JSON.stringify(obj), line)
+    })
+  }, { metadata: true, parse: 'lines' })
+
+  equal(stream[Symbol.for('pino.metadata')], true)
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})
+
+test('set metadata (default)', ({ same, plan, equal }) => {
+  plan(9)
+
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      same(this.lastLevel, obj.level)
+      same(this.lastTime, obj.time)
+      same(this.lastObj, obj)
+      same(obj, line)
+    })
+  })
+
+  equal(stream[Symbol.for('pino.metadata')], true)
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})
+
+test('do not set metadata', ({ same, plan, equal }) => {
+  plan(9)
+
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      same(this.lastLevel, undefined)
+      same(this.lastTime, undefined)
+      same(this.lastObj, undefined)
+      same(obj, line)
+    })
+  }, { metadata: false })
+
+  equal(stream[Symbol.for('pino.metadata')], undefined)
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()

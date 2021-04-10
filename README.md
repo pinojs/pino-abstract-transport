@@ -53,7 +53,6 @@ stream, it emits the following events:
 
 * `unknown` where an unparsaeble line is found, both the line and optional error is emitted.
 
-
 ## License
 
 MIT

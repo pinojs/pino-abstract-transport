@@ -1,4 +1,8 @@
 # pino-abstract-transport
+[![npm version](https://img.shields.io/npm/v/pino-abstract-transport)](https://www.npmjs.com/package/pino-abstract-transport)
+[![Build Status](https://img.shields.io/github/workflow/status/pinojs/pino-abstract-transport/CI)](https://github.com/pinojs/pino-abstract-transport/actions)
+[![Known Vulnerabilities](https://snyk.io/test/github/pinojs/pino-abstract-transport/badge.svg)](https://snyk.io/test/github/pinojs/pino-abstract-transport)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 Write Pino transports easily.
 

@@ -5,6 +5,7 @@ const split = require('split2')
 
 module.exports = function build (fn, opts = {}) {
   const parseLines = opts.parse === 'lines'
+  const close = opts.close || defaultClose
   const stream = split(function (line) {
     let value
 
@@ -38,7 +39,14 @@ module.exports = function build (fn, opts = {}) {
     }
 
     return value
-  })
+  }, { autoDestroy: true })
+
+  stream._destroy = function (err, cb) {
+    const promise = close(err, cb)
+    if (promise && typeof promise.then === 'function') {
+      promise.then(cb, cb)
+    }
+  }
 
   if (opts.metadata !== false) {
     stream[metadata] = true
@@ -59,4 +67,8 @@ module.exports = function build (fn, opts = {}) {
   }
 
   return stream
+}
+
+function defaultClose (err, cb) {
+  process.nextTick(cb, err)
 }

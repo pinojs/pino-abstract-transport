@@ -58,6 +58,11 @@ stream, it emits the following events:
 
 * `unknown` where an unparsaeble line is found, both the line and optional error is emitted.
 
+#### Options
+
+* `close(err, cb)` a function that is called to shutdown the transport. It's called both on error and non-error shutdowns.
+  It can also return a promise, in case discard the the `cb` argument.
+
 ## License
 
 MIT

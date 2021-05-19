@@ -273,3 +273,68 @@ test('do not set metadata', ({ same, plan, equal }) => {
   stream.write(lines)
   stream.end()
 })
+
+test('close logic', ({ same, plan, pass }) => {
+  plan(3)
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      same(expected.shift(), line)
+    })
+  }, {
+    close (err, cb) {
+      pass('close called')
+      process.nextTick(cb, err)
+    }
+  })
+
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})
+
+test('close with promises', ({ same, plan, pass }) => {
+  plan(3)
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      same(expected.shift(), line)
+    })
+  }, {
+    async close () {
+      pass('close called')
+    }
+  })
+
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})

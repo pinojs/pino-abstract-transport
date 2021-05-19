@@ -1,6 +1,6 @@
 {
   "name": "pino-abstract-transport",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Write Pino transports easily",
   "main": "index.js",
   "scripts": {

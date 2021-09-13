@@ -16,7 +16,7 @@ npm i pino-abstract-transport
 ## Usage
 
 ```js
-import build from 'pino-abstract-stream'
+import build from 'pino-abstract-transport'
 
 exports default async function (opts) {
   return build(async function (source) {
@@ -32,7 +32,7 @@ or in CommonJS and streams:
 ```js
 'use strict'
 
-const build = require('pino-abstract-stream')
+const build = require('pino-abstract-transport')
 
 module.exports = function (opts) {
   return build(function (source) {

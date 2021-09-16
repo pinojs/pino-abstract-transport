@@ -206,6 +206,48 @@ test('parse lines', ({ same, plan, equal }) => {
   stream.end()
 })
 
+test('custom parse line function', ({ same, plan, equal }) => {
+  plan(11)
+
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+  let num = 0
+
+  function parseLine (str) {
+    const obj = JSON.parse(str)
+    same(expected[num], obj)
+    return obj
+  }
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected[num]
+      same(this.lastLevel, obj.level)
+      same(this.lastTime, obj.time)
+      same(this.lastObj, obj)
+      same(obj, line)
+      num++
+    })
+  }, { metadata: true, parseLine })
+
+  equal(stream[Symbol.for('pino.metadata')], true)
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+})
+
 test('set metadata (default)', ({ same, plan, equal }) => {
   plan(9)
 

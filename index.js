@@ -5,12 +5,13 @@ const split = require('split2')
 
 module.exports = function build (fn, opts = {}) {
   const parseLines = opts.parse === 'lines'
+  const parseLine = typeof opts.parseLine === 'function' ? opts.parseLine : JSON.parse
   const close = opts.close || defaultClose
   const stream = split(function (line) {
     let value
 
     try {
-      value = JSON.parse(line)
+      value = parseLine(line)
     } catch (error) {
       this.emit('unknown', line, error)
       return

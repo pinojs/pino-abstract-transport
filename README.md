@@ -53,7 +53,7 @@ synchronously.
 
 If `fn` returns a [`Readable`](https://nodejs.org/api/stream.html#stream_class_stream_readable), we will 
 wrap that readable and the split2 instance using [`duplexify`](https://www.npmjs.com/package/duplexify),
-so they can be concatenated into multiple transport.
+so they can be concatenated into multiple transports.
 
 #### Events emitted
 

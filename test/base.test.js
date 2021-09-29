@@ -1,6 +1,7 @@
 'use strict'
 
 const { once } = require('events')
+const { Transform, pipeline } = require('stream')
 
 const { test } = require('tap')
 const build = require('../')
@@ -379,4 +380,58 @@ test('close with promises', ({ same, plan, pass }) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+})
+
+test('support Transform streams', ({ same, plan, error }) => {
+  plan(7)
+
+  const expected1 = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }, {
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'another message',
+    prop: 42
+  }]
+
+  const expected2 = []
+
+  const stream1 = build(function (source) {
+    const transform = new Transform({
+      objectMode: true,
+      autoDestroy: true,
+      transform (chunk, enc, cb) {
+        same(expected1.shift(), chunk)
+        chunk.service = 'from transform'
+        expected2.push(chunk)
+        cb(null, JSON.stringify(chunk) + '\n')
+      }
+    })
+
+    pipeline(source, transform, () => {})
+
+    return transform
+  })
+
+  const stream2 = build(function (source) {
+    source.on('data', function (line) {
+      same(expected2.shift(), line)
+    })
+  })
+
+  pipeline(stream1, stream2, function (err) {
+    error(err)
+    same(expected1, [])
+    same(expected2, [])
+  })
+
+  const lines = expected1.map(JSON.stringify).join('\n')
+  stream1.write(lines)
+  stream1.end()
 })

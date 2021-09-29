@@ -103,7 +103,7 @@ module.exports = function (opts) {
 
 ### Stream concatenation / pipeline
 
-You can pipeline multiple transport as well.
+You can pipeline multiple transports:
 
 ```js
 const build = require('pino-abstract-transport')

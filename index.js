@@ -66,8 +66,10 @@ module.exports = function build (fn, opts = {}) {
 
     // set it to null to not retain a reference to the promise
     res = null
-  } else if (res && typeof res.read === 'function') {
-    return duplexify(stream, res)
+  } else if (opts.transform) {
+    return duplexify(stream, res, {
+      objectMode: true
+    })
   }
 
   return stream

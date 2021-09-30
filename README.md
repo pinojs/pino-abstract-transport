@@ -51,8 +51,8 @@ Create a [`split2`](http://npm.im/split2) instance and returns it.
 This same instance is also passed to the given function, which is called
 synchronously.
 
-If `fn` returns a [`Readable`](https://nodejs.org/api/stream.html#stream_class_stream_readable), we will 
-wrap that readable and the split2 instance using [`duplexify`](https://www.npmjs.com/package/duplexify),
+If `opts.transform` is `true`, `pino-abstract-transform` will 
+wrap the split2 instance and the returned stream using [`duplexify`](https://www.npmjs.com/package/duplexify),
 so they can be concatenated into multiple transports.
 
 #### Events emitted
@@ -119,7 +119,7 @@ function buildTransform () {
         cb(null, JSON.stringify(line))
       }
     })
-  })
+  }, { transform: true })
 }
 
 function buildDestination () {
@@ -130,7 +130,7 @@ function buildDestination () {
   })
 }
 
-pipeline(buildTransform(), buildDestination(), function (err) {
+pipeline(process.stdin, buildTransform(), buildDestination(), function (err) {
   console.log('pipeline completed!', err)
 })
 ```

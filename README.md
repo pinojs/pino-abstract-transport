@@ -131,7 +131,7 @@ function buildDestination () {
 }
 
 pipeline(buildTransform(), buildDestination(), function (err) {
-  console.log('pipeline completed!, err)
+  console.log('pipeline completed!', err)
 })
 ```
 

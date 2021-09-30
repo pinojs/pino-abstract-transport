@@ -119,7 +119,7 @@ function buildTransform () {
         cb(null, JSON.stringify(line))
       }
     })
-  }, { transform: true })
+  }, { enablePipelining: true })
 }
 
 function buildDestination () {

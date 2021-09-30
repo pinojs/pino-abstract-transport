@@ -417,7 +417,7 @@ test('support Transform streams', ({ same, plan, error }) => {
     pipeline(source, transform, () => {})
 
     return transform
-  }, { transform: true })
+  }, { enablePipelining: true })
 
   const stream2 = build(function (source) {
     source.on('data', function (line) {

@@ -66,7 +66,7 @@ module.exports = function build (fn, opts = {}) {
 
     // set it to null to not retain a reference to the promise
     res = null
-  } else if (opts.transform) {
+  } else if (opts.enablePipelining) {
     return duplexify(stream, res, {
       objectMode: true
     })

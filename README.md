@@ -51,6 +51,10 @@ Create a [`split2`](http://npm.im/split2) instance and returns it.
 This same instance is also passed to the given function, which is called
 synchronously.
 
+If `opts.transform` is `true`, `pino-abstract-transform` will 
+wrap the split2 instance and the returned stream using [`duplexify`](https://www.npmjs.com/package/duplexify),
+so they can be concatenated into multiple transports.
+
 #### Events emitted
 
 In addition to all events emitted by a [`Readable`](https://nodejs.org/api/stream.html#stream_class_stream_readable)
@@ -95,6 +99,40 @@ module.exports = function (opts) {
     parseLine: parseLine
   })
 }
+```
+
+### Stream concatenation / pipeline
+
+You can pipeline multiple transports:
+
+```js
+const build = require('pino-abstract-transport')
+const { Transform, pipeline } = require('stream')
+
+function buildTransform () {
+  return build(function (source) {
+    return new Transform({
+      objectMode: true,
+      autoDestroy: true,
+      transform (line, enc, cb) {
+        line.service = 'bob'
+        cb(null, JSON.stringify(line))
+      }
+    })
+  }, { enablePipelining: true })
+}
+
+function buildDestination () {
+  return build(function (source) {
+    source.on('data', function (obj) {
+      console.log(obj)
+    })
+  })
+}
+
+pipeline(process.stdin, buildTransform(), buildDestination(), function (err) {
+  console.log('pipeline completed!', err)
+})
 ```
 
 ## License

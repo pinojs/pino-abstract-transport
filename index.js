@@ -2,7 +2,20 @@
 
 const metadata = Symbol.for('pino.metadata')
 const split = require('split2')
-const duplexify = require('duplexify')
+
+const nodeVersion = process.versions.node.split('.')
+const nodeMajor = Number(nodeVersion[0])
+const nodeMinor = Number(nodeVersion[1])
+
+let makeDuplex
+
+if (nodeMajor >= 17 || (nodeMajor === 16 && nodeMinor >= 8)) {
+  const { Duplex } = require('stream')
+  makeDuplex = (writable, readable) => Duplex.from({ writable, readable })
+} else {
+  const duplexify = require('duplexify')
+  makeDuplex = (writable, readable) => duplexify(writable, readable, { objectMode: true })
+}
 
 module.exports = function build (fn, opts = {}) {
   const parseLines = opts.parse === 'lines'
@@ -67,9 +80,7 @@ module.exports = function build (fn, opts = {}) {
     // set it to null to not retain a reference to the promise
     res = null
   } else if (opts.enablePipelining && res) {
-    return duplexify(stream, res, {
-      objectMode: true
-    })
+    return makeDuplex(stream, res)
   }
 
   return stream

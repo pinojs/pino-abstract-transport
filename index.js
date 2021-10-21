@@ -9,6 +9,7 @@ const nodeMinor = Number(nodeVersion[1])
 
 let makeDuplex
 
+/* istanbul ignore else */
 if (nodeMajor >= 17 || (nodeMajor === 16 && nodeMinor >= 8)) {
   const { Duplex } = require('stream')
   makeDuplex = (writable, readable) => Duplex.from({ writable, readable })

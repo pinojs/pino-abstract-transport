@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",
-    "test": "standard | snazzy && tap test/*.test.js",
-    "test-ci": "standard | snazzy && tap test/*.test.js --coverage-report=lcovonly"
+    "test": "standard | snazzy && tap test/*.test.js  && tsd",
+    "test-ci": "standard | snazzy && tap test/*.test.js --coverage-report=lcovonly && tsd"
   },
   "repository": {
     "type": "git",
@@ -27,9 +27,15 @@
     "split2": "^4.0.0"
   },
   "devDependencies": {
+    "@types/duplexify": "^3.6.0",
+    "@types/node": "^16.11.6",
     "husky": "^7.0.0",
     "snazzy": "^9.0.0",
     "standard": "^16.0.3",
-    "tap": "^15.0.2"
+    "tap": "^15.0.2",
+    "tsd": "^0.18.0"
+  },
+  "tsd": {
+    "directory" : "./test/types"
   }
 }

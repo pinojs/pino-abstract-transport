@@ -1,15 +1,17 @@
 import build, { OnUnknown } from "../../index";
 import { expectType } from "tsd";
-import { Duplexify } from "duplexify";
 import { Transform } from "stream";
 
 /**
- * build with enablePipelining returns a Duplexify stream
+ * If enablePipelining is set to true, the function passed as an argument
+ * must return a transform. The unknown event should be listened to on the
+ * stream passed in the first argument.
  */
-expectType<Duplexify>(build((source) => source, { enablePipelining: true }));
+expectType<Transform>(build((source) => source, { enablePipelining: true }));
 
 /**
- * build without enablePipelining returns a node stream
+ * If enablePipelining is not set the unknown event can be listened to on
+ * the returned stream.
  */
 expectType<Transform & OnUnknown>(build((source) => {}));
 

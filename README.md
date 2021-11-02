@@ -44,17 +44,10 @@ module.exports = function (opts) {
 ```
 
 ## Typescript usage
-Install the type definitions for [duplexify](https://github.com/mafintosh/duplexify) and node.
-
+Install the type definitions for node. Make sure the major version of the type definitions matches the node version you are using.
 #### Node 16
 ```
-npm i -D @types/node @types/duplexify
-```
-
-#### Node < 16
-If you are using an older version of node, make sure @types/node is on the same major version as your node version. For example if you are using node 14:
-```
-npm i -D @types/node@14 @types/duplexify
+npm i -D @types/node@16
 ```
 
 ## API

@@ -3,9 +3,7 @@
 // Definitions by: Diyar Oktay <https://github.com/windupbird144>
 
 /// <reference types="node" />
-/// <reference types="duplexify" />
 
-import { Duplexify } from "duplexify";
 import { Transform } from "stream";
 
 type BuildOptions = {
@@ -44,7 +42,11 @@ type BuildOptions = {
   metadata?: false;
 };
 
-type DuplexifyBuildOptions = BuildOptions & {
+/**
+ * Pass these options to wrap the split2 stream and
+ * the returned stream into a Duplex
+ */
+type EnablePipelining = BuildOptions & {
   enablePipelining: true;
 };
 
@@ -71,16 +73,16 @@ declare function build(
 ): Transform & OnUnknown;
 
 /**
- * Creates a split2 instance and passes it to the given function, which is called synchronously.
- * Wraps the split2 instance and the returned stream using duplexify, so they can be concatenated
- * into multiple transports.
+ * Creates a split2 instance and passes it to the given function, which is called
+ * synchronously. Then wraps the split2 instance and the returned stream into a
+ * Duplex, so they can be concatenated into multiple transports.
  *
- * @returns {duplexify.Duplexify} the wrapped split2 instance
+ * @returns {Transform} the wrapped split2 instance
  */
 declare function build(
   fn: (transform: Transform & OnUnknown) => Transform & OnUnknown,
-  opts: DuplexifyBuildOptions
-): Duplexify;
+  opts: EnablePipelining
+): Transform;
 
 export { OnUnknown };
 

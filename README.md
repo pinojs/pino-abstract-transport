@@ -18,7 +18,7 @@ npm i pino-abstract-transport
 ```js
 import build from 'pino-abstract-transport'
 
-exports default async function (opts) {
+export default async function (opts) {
   return build(async function (source) {
     for await (let obj of source) {
       console.log(obj)
@@ -43,6 +43,13 @@ module.exports = function (opts) {
 }
 ```
 
+## Typescript usage
+Install the type definitions for node. Make sure the major version of the type definitions matches the node version you are using.
+#### Node 16
+```
+npm i -D @types/node@16
+```
+
 ## API
 
 ### build(fn, opts) => Stream
@@ -60,7 +67,7 @@ so they can be concatenated into multiple transports.
 In addition to all events emitted by a [`Readable`](https://nodejs.org/api/stream.html#stream_class_stream_readable)
 stream, it emits the following events:
 
-* `unknown` where an unparsaeble line is found, both the line and optional error is emitted.
+* `unknown` where an unparsable line is found, both the line and optional error is emitted.
 
 #### Options
 
@@ -69,7 +76,7 @@ stream, it emits the following events:
 * `close(err, cb)` a function that is called to shutdown the transport. It's called both on error and non-error shutdowns.
   It can also return a promise. In this case discard the the `cb` argument.
 
-* `parseLine(line)` a function that is used to parse line recieved from `pino`.
+* `parseLine(line)` a function that is used to parse line received from `pino`.
 
 ## Example
 

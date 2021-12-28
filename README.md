@@ -71,7 +71,8 @@ stream, it emits the following events:
 
 #### Options
 
-* `parse` an option to change to data format passed to build function. Default: `undefined`.
+* `parse` an option to change to data format passed to build function. When this option is set to `lines`,
+  the data is passed as a string, otherwise the data is passed as an object. Default: `undefined`.
 
 * `close(err, cb)` a function that is called to shutdown the transport. It's called both on error and non-error shutdowns.
   It can also return a promise. In this case discard the the `cb` argument.

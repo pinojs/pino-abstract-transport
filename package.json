@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/pinojs/pino-abstract-transport#readme",
   "dependencies": {
-    "duplexify": "^4.1.2",
+    "readable-stream": "^4.0.0",
     "split2": "^4.0.0"
   },
   "devDependencies": {

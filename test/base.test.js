@@ -76,12 +76,12 @@ test('null support', (t) => {
 })
 
 test('broken json', async (t) => {
-  const { deepEqual, completed } = tspl(t, { plan: 2 })
+  const { deepEqual, match, completed } = tspl(t, { plan: 2 })
   const expected = '{ "truncated'
   const stream = build(function (source) {
     source.on('unknown', function (line, error) {
       deepEqual(line, expected)
-      deepEqual('Unexpected end of JSON input', error.message)
+      match(error.message, /(Unexpected end of JSON input)|(Unterminated string in JSON)/)
     })
   })
 

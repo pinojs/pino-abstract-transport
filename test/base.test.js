@@ -75,8 +75,8 @@ test('null support', (t) => {
   stream.end()
 })
 
-test('broken json', (t) => {
-  const { deepEqual } = tspl(t, { plan: 2 })
+test('broken json', async (t) => {
+  const { deepEqual, completed } = tspl(t, { plan: 2 })
   const expected = '{ "truncated'
   const stream = build(function (source) {
     source.on('unknown', function (line, error) {
@@ -87,6 +87,7 @@ test('broken json', (t) => {
 
   stream.write(expected + '\n')
   stream.end()
+  await completed
 })
 
 test('pure values', (t) => {

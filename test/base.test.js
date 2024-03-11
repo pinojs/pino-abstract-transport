@@ -7,8 +7,8 @@ const test = require('node:test')
 const tspl = require('@matteo.collina/tspl')
 const build = require('../')
 
-test('parse newlined delimited JSON', (t) => {
-  const { deepEqual } = tspl(t, { plan: 2 })
+test('parse newlined delimited JSON', async (t) => {
+  const { deepEqual, completed } = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -33,10 +33,11 @@ test('parse newlined delimited JSON', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('parse newlined delimited JSON', (t) => {
-  const { deepEqual } = tspl(t, { plan: 2 })
+test('parse newlined delimited JSON', async (t) => {
+  const { deepEqual, completed } = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -61,10 +62,11 @@ test('parse newlined delimited JSON', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('null support', (t) => {
-  const { deepEqual } = tspl(t, { plan: 1 })
+test('null support', async (t) => {
+  const { deepEqual, completed } = tspl(t, { plan: 1 })
   const stream = build(function (source) {
     source.on('unknown', function (line) {
       deepEqual(line, 'null')
@@ -73,6 +75,7 @@ test('null support', (t) => {
 
   stream.write('null\n')
   stream.end()
+  await completed
 })
 
 test('broken json', async (t) => {
@@ -90,8 +93,8 @@ test('broken json', async (t) => {
   await completed
 })
 
-test('pure values', (t) => {
-  const { deepEqual, ok } = tspl(t, { plan: 3 })
+test('pure values', async (t) => {
+  const { deepEqual, ok, completed } = tspl(t, { plan: 3 })
   const stream = build(function (source) {
     source.on('data', function (line) {
       deepEqual(42, line.data)
@@ -102,10 +105,11 @@ test('pure values', (t) => {
 
   stream.write('42\n')
   stream.end()
+  await completed
 })
 
-test('support async iteration', (t) => {
-  const { deepEqual } = tspl(t, { plan: 2 })
+test('support async iteration', async (t) => {
+  const { deepEqual, completed } = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -130,20 +134,22 @@ test('support async iteration', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
 test('rejecting errors the stream', async (t) => {
-  const { deepEqual } = tspl(t, { plan: 1 })
+  const { deepEqual, completed } = tspl(t, { plan: 1 })
   const stream = build(async function (source) {
     throw new Error('kaboom')
   })
 
   const [err] = await once(stream, 'error')
   deepEqual('kaboom', err.message)
+  await completed
 })
 
-test('set metadata', (t) => {
-  const { deepEqual, equal } = tspl(t, { plan: 9 })
+test('set metadata', async (t) => {
+  const { deepEqual, equal, completed } = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -174,10 +180,11 @@ test('set metadata', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('parse lines', (t) => {
-  const { deepEqual, equal } = tspl(t, { plan: 9 })
+test('parse lines', async (t) => {
+  const { deepEqual, equal, completed } = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -208,10 +215,11 @@ test('parse lines', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('custom parse line function', (t) => {
-  const { deepEqual, equal } = tspl(t, { plan: 11 })
+test('custom parse line function', async (t) => {
+  const { deepEqual, equal, completed } = tspl(t, { plan: 11 })
 
   const expected = [{
     level: 30,
@@ -250,10 +258,11 @@ test('custom parse line function', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('set metadata (default)', (t) => {
-  const { deepEqual, equal } = tspl(t, { plan: 9 })
+test('set metadata (default)', async (t) => {
+  const { deepEqual, equal, completed } = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -284,10 +293,11 @@ test('set metadata (default)', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('do not set metadata', (t) => {
-  const { deepEqual, equal } = tspl(t, { plan: 9 })
+test('do not set metadata', async (t) => {
+  const { deepEqual, equal, completed } = tspl(t, { plan: 9 })
 
   const expected = [{
     level: 30,
@@ -318,10 +328,11 @@ test('do not set metadata', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('close logic', (t) => {
-  const { deepEqual, ok } = tspl(t, { plan: 2 })
+test('close logic', async (t) => {
+  const { deepEqual, ok, completed } = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -351,10 +362,11 @@ test('close logic', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
-test('close with promises', (t) => {
-  const { deepEqual, ok } = tspl(t, { plan: 2 })
+test('close with promises', async (t) => {
+  const { deepEqual, ok, completed } = tspl(t, { plan: 2 })
   const expected = [{
     level: 30,
     time: 1617955768092,
@@ -383,6 +395,7 @@ test('close with promises', (t) => {
   const lines = expected.map(JSON.stringify).join('\n')
   stream.write(lines)
   stream.end()
+  await completed
 })
 
 test('support Transform streams', async (t) => {

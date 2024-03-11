@@ -384,9 +384,8 @@ test('close with promises', (t) => {
   stream.end()
 })
 
-test('support Transform streams', (t) => {
-  // TODO: why isn't `plan: 7` counted correctly?
-  const { deepEqual, ifError } = tspl(t, { plan: 7 })
+test('support Transform streams', async (t) => {
+  const { deepEqual, ifError, completed } = tspl(t, { plan: 7 })
 
   const expected1 = [{
     level: 30,
@@ -437,4 +436,5 @@ test('support Transform streams', (t) => {
   const lines = expected1.map(JSON.stringify).join('\n')
   stream1.write(lines)
   stream1.end()
+  await completed
 })

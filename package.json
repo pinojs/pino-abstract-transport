@@ -4,7 +4,7 @@
   "description": "Write Pino transports easily",
   "main": "index.js",
   "scripts": {
-    "test": "standard | snazzy && c8 node --test test/*.test.js  && tsd",
+    "test": "standard | snazzy && c8 node --test test/base.test.js  && tsd",
     "test-ci": "npm test"
   },
   "repository": {

@@ -67,7 +67,7 @@ module.exports = function build (fn, opts = {}) {
     // set it to null to not retain a reference to the promise
     res = null
   } else if (opts.enablePipelining && res) {
-    return Duplex.from({ writable: stream, readable: res, objectMode: true })
+    return Duplex.from({ writable: stream, readable: res })
   }
 
   return stream

@@ -4,9 +4,8 @@
   "description": "Write Pino transports easily",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install",
-    "test": "standard | snazzy && tap test/*.test.js  && tsd",
-    "test-ci": "standard | snazzy && tap test/*.test.js --coverage-report=lcovonly && tsd"
+    "test": "standard | snazzy && c8 node --test test/base.test.js  && tsd",
+    "test-ci": "npm test"
   },
   "repository": {
     "type": "git",
@@ -27,14 +26,18 @@
     "split2": "^4.0.0"
   },
   "devDependencies": {
+    "@fastify/pre-commit": "^2.1.0",
+    "@matteo.collina/tspl": "^0.1.1",
     "@types/node": "^20.1.0",
-    "husky": "^9.0.6",
+    "c8": "^9.1.0",
     "snazzy": "^9.0.0",
     "standard": "^17.0.0",
-    "tap": "^16.0.0",
     "tsd": "^0.30.0"
   },
   "tsd": {
     "directory": "./test/types"
-  }
+  },
+  "precommit": [
+    "test"
+  ]
 }

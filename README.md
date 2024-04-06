@@ -78,7 +78,7 @@ stream, it emits the following events:
 
 * `parseLine(line)` a function that is used to parse line received from `pino`.
 
-* `expectPinoConfig` a boolean that indicates if the transport expects a pino to add some of its configuration to the stream. Default: `false`.
+* `expectPinoConfig` a boolean that indicates if the transport expects Pino to add some of its configuration to the stream. Default: `false`.
 
 ## Example
 

@@ -74,13 +74,14 @@ test('null support', ({ same, plan }) => {
   stream.end()
 })
 
-test('broken json', ({ same, plan }) => {
+test('broken json', ({ match, same, plan }) => {
   plan(2)
   const expected = '{ "truncated'
   const stream = build(function (source) {
     source.on('unknown', function (line, error) {
       same(expected, line)
-      same(error.message, 'Unexpected end of JSON input')
+      const regex = /^(Unexpected end of JSON input|Unterminated string in JSON at position 12)$/
+      match(error.message, regex)
     })
   })
 

@@ -8,7 +8,7 @@ Write Pino transports easily.
 
 ## Install
 
-```
+```sh
 npm i pino-abstract-transport
 ```
 
@@ -43,9 +43,12 @@ module.exports = function (opts) {
 ```
 
 ## Typescript usage
+
 Install the type definitions for node. Make sure the major version of the type definitions matches the node version you are using.
+
 #### Node 16
-```
+
+```sh
 npm i -D @types/node@16
 ```
 
@@ -77,6 +80,8 @@ stream, it emits the following events:
   It can also return a promise. In this case discard the the `cb` argument.
 
 * `parseLine(line)` a function that is used to parse line received from `pino`.
+
+* `expectPinoConfig` a boolean that indicates if the transport expects Pino to add some of its configuration to the stream. Default: `false`.
 
 ## Example
 
@@ -140,6 +145,26 @@ function buildDestination () {
 pipeline(process.stdin, buildTransform(), buildDestination(), function (err) {
   console.log('pipeline completed!', err)
 })
+```
+
+### Using pino config
+
+Setting `expectPinoConfig` to `true` will make the transport wait for pino to send its configuration before starting to process logs. It will add `levels`, `messageKey` and `errorKey` to the stream.
+
+When used with an incompatible version of pino, the stream will immediately error.
+
+```js
+import build from 'pino-abstract-transport'
+
+export default function (opts) {
+  return build(async function (source) {
+    for await (const obj of source) {
+      console.log(`[${source.levels.labels[obj.level]}]: ${obj[source.messageKey]}`)
+    }
+  }, {
+    expectPinoConfig: true
+  })
+}
 ```
 
 ## License

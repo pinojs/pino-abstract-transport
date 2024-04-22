@@ -139,6 +139,13 @@ test('rejecting errors the stream', async ({ same, plan }) => {
   same(err.message, 'kaboom')
 })
 
+test('emits an error if the transport expects pino to send the config, but pino is not going to', async function ({ plan, same }) {
+  plan(1)
+  const stream = build(() => {}, { expectPinoConfig: true })
+  const [err] = await once(stream, 'error')
+  same(err.message, 'This transport is not compatible with the current version of pino. Please upgrade pino to the latest version.')
+})
+
 test('set metadata', ({ same, plan, equal }) => {
   plan(9)
 

@@ -96,8 +96,7 @@ function workerTest (filename, description = '') {
       errorKey: 'err'
     }
 
-    stream.worker.postMessage({ code: 'PINO_CONFIG', config: pinoConfig })
-    // stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
+    stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
 
     port2.on('message', function (message) {
       same(expected.shift(), message.data)
@@ -156,8 +155,7 @@ function workerTest (filename, description = '') {
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
-    stream.worker.postMessage({ code: 'PINO_CONFIG', config: pinoConfig })
-    // stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
+    stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
     stream.write(lines)
     stream.end()
   })
@@ -209,12 +207,9 @@ function workerTest (filename, description = '') {
     })
 
     const lines = expected.map(JSON.stringify).join('\n')
-    stream.worker.postMessage('not a PINO_CONFIG')
-    // stream.emit('message', 'not a PINO_CONFIG')
-    stream.worker.postMessage({ code: 'NOT_PINO_CONFIG', config: { levels: 'foo', messageKey: 'bar', errorKey: 'baz' } })
-    // stream.emit('message', { code: 'NOT_PINO_CONFIG', config: { levels: 'foo', messageKey: 'bar', errorKey: 'baz' } })
-    stream.worker.postMessage({ code: 'PINO_CONFIG', config: pinoConfig })
-    // stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
+    stream.emit('message', 'not a PINO_CONFIG')
+    stream.emit('message', { code: 'NOT_PINO_CONFIG', config: { levels: 'foo', messageKey: 'bar', errorKey: 'baz' } })
+    stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
     stream.write(lines)
     stream.end()
   })
@@ -267,8 +262,7 @@ function workerTest (filename, description = '') {
 
     const lines = expected.map(JSON.stringify).join('\n')
     stream.write(lines)
-    stream.worker.postMessage({ code: 'PINO_CONFIG', config: pinoConfig })
-    // stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
+    stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
     stream.end()
   })
 
@@ -357,8 +351,7 @@ test('waits for the pino config when pipelining', function ({ same, plan }) {
     same(expected.shift(), message.data)
   })
 
-  stream.worker.postMessage({ code: 'PINO_CONFIG', config: pinoConfig })
-  // stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
+  stream.emit('message', { code: 'PINO_CONFIG', config: pinoConfig })
   stream.write(lines)
   stream.end()
 })

@@ -23,16 +23,16 @@
   },
   "homepage": "https://github.com/pinojs/pino-abstract-transport#readme",
   "dependencies": {
-    "readable-stream": "^4.0.0",
-    "split2": "^4.0.0"
+    "readable-stream": "^4.5.2",
+    "split2": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.1.0",
-    "husky": "^9.0.6",
+    "@types/node": "^20.12.7",
+    "husky": "^9.0.11",
     "snazzy": "^9.0.0",
-    "standard": "^17.0.0",
-    "tap": "^16.0.0",
-    "thread-stream": "^2.6.0",
+    "standard": "^17.1.0",
+    "tap": "^18.7.2",
+    "thread-stream": "^2.7.0",
     "tsd": "^0.31.0"
   },
   "tsd": {

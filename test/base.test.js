@@ -80,7 +80,7 @@ test('broken json', ({ match, same, plan }) => {
   const stream = build(function (source) {
     source.on('unknown', function (line, error) {
       same(expected, line)
-      const regex = /^(Unexpected end of JSON input|Unterminated string in JSON at position 12)$/
+      const regex = /^(Unexpected end of JSON input|Unterminated string in JSON at position 12)( \(line 1 column 13\))?$/
       match(error.message, regex)
     })
   })

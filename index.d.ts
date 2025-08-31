@@ -63,7 +63,7 @@ type EnablePipelining = BuildOptions & {
  * @returns {Promise<Transform>} the split2 instance
  */
 declare function build(
-  fn: (transform: Transform & build.OnUnknown) => void | Promise<void>,
+  fn: (transform: Transform & build.OnUnknown & build.PinoConfig) => void | Promise<void>,
   opts: BuildOptions & { expectPinoConfig: true }
 ): Promise<Transform & build.OnUnknown>;
 
@@ -87,7 +87,7 @@ declare function build(
  * @returns {Promise<Transform>} the wrapped split2 instance
  */
 declare function build(
-  fn: (transform: Transform & build.OnUnknown) => Transform & build.OnUnknown,
+  fn: (transform: Transform & build.OnUnknown & build.PinoConfig) => Transform & build.OnUnknown,
   opts: EnablePipelining & { expectPinoConfig: true }
 ): Promise<Transform>;
 
@@ -116,6 +116,30 @@ declare namespace build {
       event: "unknown",
       listener: (line: string, error: unknown) => void
     ): void;
+  }
+
+  export interface PinoConfig {
+    /**
+     * The string key for the 'message' in the JSON object. Default: "msg".
+     */
+    messageKey: string;
+    /**
+     * The string key for the 'error' in the JSON object. Default: "err".
+     */
+    errorKey: string;
+    /**
+     * The levels object contains mappings of level names to their respective internal number representation.
+     */
+    levels: {
+      /**
+       * Returns the mappings of level names to their respective internal number representation.
+       */
+      values: { [level: string]: number };
+      /**
+       * Returns the mappings of level internal level numbers to their string representations.
+       */
+      labels: { [level: number]: string };
+  }
   }
 }
 

@@ -151,7 +151,7 @@ declare namespace build {
        * Returns the mappings of level internal level numbers to their string representations.
        */
       labels: { [level: number]: string };
-  }
+    };
   }
 }
 

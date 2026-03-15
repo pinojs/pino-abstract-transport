@@ -29,3 +29,10 @@ expectType<(Promise<Transform & OnUnknown>)>(build((source) => {}, { expectPinoC
  * build also accepts an async function
  */
 expectType<Transform  & OnUnknown>(build(async (source) => {}));
+
+/**
+ * timeKey and levelKey options can be set to customize metadata keys
+ */
+expectType<Transform & OnUnknown>(build((source) => {}, { timeKey: 'timestamp' }));
+expectType<Transform & OnUnknown>(build((source) => {}, { levelKey: 'severity' }));
+expectType<Transform & OnUnknown>(build((source) => {}, { timeKey: 'timestamp', levelKey: 'severity' }));

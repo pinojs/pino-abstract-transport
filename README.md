@@ -82,6 +82,10 @@ stream, it emits the following events:
 
 * `expectPinoConfig` a boolean that indicates if the transport expects Pino to add some of its configuration to the stream. Default: `false`.
 
+* `timeKey` the property key to use for extracting the time value from log lines, stored in `stream.lastTime` when metadata is enabled. Default: `"time"`.
+
+* `levelKey` the property key to use for extracting the level value from log lines, stored in `stream.lastLevel` when metadata is enabled. Default: `"level"`.
+
 ## Example
 
 ### custom parseLine

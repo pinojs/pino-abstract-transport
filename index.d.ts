@@ -42,6 +42,18 @@ type BuildOptions = {
   metadata?: false;
 
   /**
+   * `timeKey` the property key to use for extracting the time value from log lines.
+   * @default "time"
+   */
+  timeKey?: string;
+
+  /**
+   * `levelKey` the property key to use for extracting the level value from log lines.
+   * @default "level"
+   */
+  levelKey?: string;
+
+  /**
    * `expectPinoConfig` If set to true, the transport will wait for pino to send its
    * configuration before starting to process logs.
    */

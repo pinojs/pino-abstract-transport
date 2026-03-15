@@ -22,6 +22,8 @@ module.exports = function build (fn, opts = {}) {
   const parseLines = opts.parse === 'lines'
   const parseLine = typeof opts.parseLine === 'function' ? opts.parseLine : JSON.parse
   const close = opts.close || defaultClose
+  const timeKey = opts.timeKey || 'time'
+  const levelKey = opts.levelKey || 'level'
   const stream = split(function (line) {
     let value
 
@@ -45,8 +47,8 @@ module.exports = function build (fn, opts = {}) {
     }
 
     if (stream[metadata]) {
-      stream.lastTime = value.time
-      stream.lastLevel = value.level
+      stream.lastTime = value[timeKey]
+      stream.lastLevel = value[levelKey]
       stream.lastObj = value
     }
 

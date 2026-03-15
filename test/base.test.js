@@ -347,6 +347,91 @@ test('do not set metadata', async (t) => {
   await plan
 })
 
+test('custom timeKey', async (t) => {
+  const plan = tspl(t, { plan: 5 })
+
+  const expected = [{
+    severity: 30,
+    timestamp: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      plan.equal(this.lastTime, obj.timestamp)
+      plan.equal(this.lastLevel, obj.severity)
+      match(this.lastObj, obj, { assert: plan })
+      match(obj, line, { assert: plan })
+    })
+  }, { metadata: true, timeKey: 'timestamp', levelKey: 'severity' })
+
+  plan.equal(stream[Symbol.for('pino.metadata')], true)
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+
+  await plan
+})
+
+test('custom levelKey', async (t) => {
+  const plan = tspl(t, { plan: 4 })
+
+  const expected = [{
+    priority: 50,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      plan.equal(this.lastTime, obj.time)
+      plan.equal(this.lastLevel, obj.priority)
+      match(this.lastObj, obj, { assert: plan })
+      match(obj, line, { assert: plan })
+    })
+  }, { metadata: true, levelKey: 'priority' })
+
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+
+  await plan
+})
+
+test('default timeKey and levelKey', async (t) => {
+  const plan = tspl(t, { plan: 4 })
+
+  const expected = [{
+    level: 30,
+    time: 1617955768092,
+    pid: 2942,
+    hostname: 'MacBook-Pro.local',
+    msg: 'hello world'
+  }]
+
+  const stream = build(function (source) {
+    source.on('data', function (line) {
+      const obj = expected.shift()
+      plan.equal(this.lastTime, obj.time)
+      plan.equal(this.lastLevel, obj.level)
+      match(this.lastObj, obj, { assert: plan })
+      match(obj, line, { assert: plan })
+    })
+  }, { metadata: true })
+
+  const lines = expected.map(JSON.stringify).join('\n')
+  stream.write(lines)
+  stream.end()
+
+  await plan
+})
+
 test('close logic', async (t) => {
   const plan = tspl(t, { plan: 3 })
   const expected = [{

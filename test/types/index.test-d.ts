@@ -1,4 +1,4 @@
-import build, { OnUnknown } from "../../index";
+import build, { OnUnknown, PinoConfig } from "../../index";
 import { expectType } from "tsd";
 import { Transform } from "stream";
 
@@ -7,23 +7,33 @@ import { Transform } from "stream";
  * must return a transform. The unknown event should be listened to on the
  * stream passed in the first argument.
  */
-expectType<Transform>(build((source) => source, { enablePipelining: true }));
+expectType<Transform>(build((source) => {
+    expectType<Transform & OnUnknown>(source);
+    return source
+}, { enablePipelining: true }));
 
 /**
  * If expectPinoConfig is set with enablePipelining, build returns a promise
  */
-expectType<(Promise<Transform>)>(build((source) => source, { enablePipelining: true, expectPinoConfig: true }));
+expectType<(Promise<Transform>)>(build((source) => {
+    expectType<Transform & OnUnknown & PinoConfig>(source);
+    return source
+}, { enablePipelining: true, expectPinoConfig: true }));
 
 /**
  * If enablePipelining is not set the unknown event can be listened to on
  * the returned stream.
  */
-expectType<Transform & OnUnknown>(build((source) => {}));
+expectType<Transform & OnUnknown>(build((source) => {
+    expectType<Transform & OnUnknown>(source);
+}));
 
 /**
  * If expectPinoConfig is set, build returns a promise
  */
-expectType<(Promise<Transform & OnUnknown>)>(build((source) => {}, { expectPinoConfig: true }));
+expectType<(Promise<Transform & OnUnknown>)>(build((source) => {
+    expectType<Transform & OnUnknown & PinoConfig>(source);
+}, { expectPinoConfig: true }));
 
 /**
  * build also accepts an async function

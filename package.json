@@ -4,8 +4,9 @@
   "description": "Write Pino transports easily",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint",
     "prepare": "husky install",
-    "test": "standard | snazzy && borp --check-coverage 'test/*.test.js'  && tsd",
+    "test": "borp --check-coverage 'test/*.test.js'  && tsd",
     "test-ci": "npm test"
   },
   "repository": {
@@ -23,17 +24,17 @@
   },
   "homepage": "https://github.com/pinojs/pino-abstract-transport#readme",
   "dependencies": {
-    "split2": "^4.0.0"
+    "split2": "^4.2.0"
   },
   "devDependencies": {
     "@matteo.collina/tspl": "^0.2.0",
-    "@types/node": "^20.1.0",
-    "borp": "^0.20.2",
+    "@types/node": "^20.19.39",
+    "borp": "^1.0.0",
+    "eslint": "^9.39.4",
     "husky": "^9.0.6",
-    "snazzy": "^9.0.0",
-    "standard": "^17.0.0",
-    "thread-stream": "^3.1.0",
-    "tsd": "^0.31.0"
+    "neostandard": "^0.13.0",
+    "thread-stream": "^4.0.0",
+    "tsd": "^0.33.0"
   },
   "tsd": {
     "directory": "./test/types"

@@ -4,7 +4,7 @@
 
 /// <reference types="node" />
 
-import { Transform } from "stream";
+import { Transform } from 'stream'
 
 type BuildOptions = {
   /**
@@ -18,7 +18,7 @@ type BuildOptions = {
    * @default undefined
    *
    */
-  parse?: "lines";
+  parse?: 'lines';
 
   /**
    * `close(err, cb)` a function that is called to shutdown the transport.
@@ -58,7 +58,7 @@ type BuildOptions = {
    * configuration before starting to process logs.
    */
   expectPinoConfig?: boolean;
-};
+}
 
 /**
  * Pass these options to wrap the split2 stream and
@@ -66,7 +66,7 @@ type BuildOptions = {
  */
 type EnablePipelining = BuildOptions & {
   enablePipelining: true;
-};
+}
 
 /**
  * Create a split2 instance and returns it. This same instance is also passed
@@ -74,10 +74,10 @@ type EnablePipelining = BuildOptions & {
  *
  * @returns {Promise<Transform>} the split2 instance
  */
-declare function build(
+declare function build (
   fn: (transform: Transform & build.OnUnknown) => void | Promise<void>,
   opts: BuildOptions & { expectPinoConfig: true }
-): Promise<Transform & build.OnUnknown>;
+): Promise<Transform & build.OnUnknown>
 
 /**
  * Create a split2 instance and returns it. This same instance is also passed
@@ -85,10 +85,10 @@ declare function build(
  *
  * @returns {Transform} the split2 instance
  */
-declare function build(
+declare function build (
   fn: (transform: Transform & build.OnUnknown) => void | Promise<void>,
   opts?: BuildOptions
-): Transform & build.OnUnknown;
+): Transform & build.OnUnknown
 
 /**
  * Creates a split2 instance and passes it to the given function, which is called
@@ -98,10 +98,10 @@ declare function build(
  *
  * @returns {Promise<Transform>} the wrapped split2 instance
  */
-declare function build(
+declare function build (
   fn: (transform: Transform & build.OnUnknown) => Transform & build.OnUnknown,
   opts: EnablePipelining & { expectPinoConfig: true }
-): Promise<Transform>;
+): Promise<Transform>
 
 /**
  * Creates a split2 instance and passes it to the given function, which is called
@@ -110,10 +110,10 @@ declare function build(
  *
  * @returns {Transform} the wrapped split2 instance
  */
-declare function build(
+declare function build (
   fn: (transform: Transform & build.OnUnknown) => Transform & build.OnUnknown,
   opts: EnablePipelining
-): Transform;
+): Transform
 
 declare namespace build {
   export interface OnUnknown {
@@ -125,10 +125,10 @@ declare namespace build {
      * @param error the error that was thrown when parsing the line
      */
     on(
-      event: "unknown",
+      event: 'unknown',
       listener: (line: string, error: unknown) => void
     ): void;
   }
 }
 
-export = build;
+export = build

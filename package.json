@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint",
-    "prepare": "husky install",
     "test": "borp --check-coverage 'test/*.test.js'  && tsd",
     "test-ci": "npm test"
   },
@@ -31,7 +30,6 @@
     "@types/node": "^20.19.39",
     "borp": "^1.0.0",
     "eslint": "^9.39.4",
-    "husky": "^9.0.6",
     "neostandard": "^0.13.0",
     "thread-stream": "^4.0.0",
     "tsd": "^0.33.0"
